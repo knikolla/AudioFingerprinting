@@ -1,7 +1,8 @@
 import hashlib
 
 from operator import itemgetter
-from sqlalchemy import create_engine, select, Table, Integer, String, Column, MetaData, Sequence, ForeignKey
+from sqlalchemy import (create_engine, select, Table, Integer, String,
+                        Column, MetaData, Sequence, ForeignKey, UniqueConstraint)
 from sqlalchemy.exc import IntegrityError
 
 class Database(object):
@@ -16,9 +17,10 @@ class Database(object):
                             Column('album', String(80)))
 
         self._fingerprints = Table('fingerprints', self._metadata,
-                                   Column('hash', String(40), primary_key=True),
+                                   Column('hash', String(40), index=True),
                                    Column('time', Integer),
-                                   Column('song_id', Integer, ForeignKey('songs.id')))
+                                   Column('song_id', Integer, ForeignKey('songs.id')),
+                                   UniqueConstraint('hash', 'time', 'song_id'))
 
         self._metadata.create_all(self._engine)
 

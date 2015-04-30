@@ -44,7 +44,7 @@ def get_spectrogram(signal):
     return result
 
 
-def get_peaks(image):
+def get_peaks(image, plot=False):
     """Get the peaks from the 2D array, and do some filtering to reduce the number of peaks.
 
     :param image: 2D array representing the image
@@ -72,7 +72,6 @@ def get_peaks(image):
     frequency = [x[1] for x in filtered_peaks]
 
     # scatter of the peaks
-    plot = False
     if plot:
         fig, ax = pyplot.subplots()
         ax.imshow(image)

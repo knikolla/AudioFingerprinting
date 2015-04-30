@@ -29,7 +29,7 @@ def find(signal):
                     matches[song_id][difference] += 1
                     candidate = matches[song_id][difference]
 
-                    if candidate > best_diff:
+                    if candidate > best_count:
                         best_diff = difference
                         best_song = song_id
                         best_count = candidate
