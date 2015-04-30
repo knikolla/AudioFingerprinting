@@ -9,6 +9,8 @@ from matplotlib import pyplot, mlab
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure, binary_erosion, iterate_structure
 
+from config import WINDOW_SIZE, WINDOW_OVERLAP
+
 def read_wav(file):
     """Read a Wave file into an array
 
@@ -21,7 +23,7 @@ def read_wav(file):
     return array.array("h", frames), params
 
 
-def get_spectrogram(signal, window_size, window_overlap):
+def get_spectrogram(signal):
     """Run FFT to get the spectrogram of a signal.
 
     :param signal: array of amplitudes
@@ -31,10 +33,10 @@ def get_spectrogram(signal, window_size, window_overlap):
     """
     result = matplotlib.mlab.specgram(
         signal,
-        NFFT=window_size,
+        NFFT=WINDOW_SIZE,
         Fs=44100,
         window=matplotlib.mlab.window_hanning,
-        noverlap=window_overlap
+        noverlap=WINDOW_OVERLAP
     )[0]
 
     result = 10 * numpy.log10(result)
