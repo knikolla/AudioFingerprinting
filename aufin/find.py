@@ -1,5 +1,6 @@
 import database
 import pyaudio
+import numpy
 
 from analyze import read_wav, get_spectrogram, get_peaks
 
@@ -64,9 +65,11 @@ def from_mic():
     print("Listening...")
 
     frames = []
-    for i in range(0, int(44100 / 1024 * 5)):
+    for i in range(0, int((44100 * 6) / 1024)):
         data = stream.read(1024)
-        frames.append(data)
+        decoded = numpy.fromstring(data, 'int16')
+        frames.extend(decoded)
+
     print("Searching...")
 
     find(frames)
