@@ -1,6 +1,7 @@
 import database
+import pyaudio
 
-from analyze import get_spectrogram, get_peaks
+from analyze import read_wav, get_spectrogram, get_peaks
 
 def find(signal):
     x = get_spectrogram(signal)
@@ -15,14 +16,12 @@ def find(signal):
 
     db = database.Database()
     for h, rel_time in fingerprints:
-        match = db.get(h)
+        match = db.get_fingerprint(h)
 
         # If the fingerprint exists in the database
         if match is not None:
             song_id, abs_time = match
             difference = abs_time - rel_time
-
-            #print("SONG: " + str(song_id) + " ABS_TIME: " + str(abs_time) + " REL_TIME: " + str(rel_time))
 
             if song_id in matches:
                 if difference in matches[song_id]:
@@ -39,5 +38,32 @@ def find(signal):
             else:
                 matches[song_id] = {difference: 1}
 
+    if best_song != 0:
+        result = db.get_song(best_song)
+        print("Title: " + result["title"] + "\tAuthor: " + result["author"] + "\tAlbum: " + result["album"] +
+              "\t\t\t(" + str(best_count) + " fingerprint hits)")
 
-    print("SONG_ID: " + str(best_song) + "\tBEST_DIFF: " + str(best_diff) + "\tBEST_COUNT: " + str(best_count))
+
+def from_file(file, start=0, end=0):
+    data, params = read_wav(file)
+
+    if end <= start:
+        end = len(data)
+
+    find(data[start:end])
+
+
+def from_mic():
+    audio = pyaudio.PyAudio()
+    stream = audio.open(format=pyaudio.paInt16, channels=1,
+                        rate=44100, input=True,
+                        frames_per_buffer=1024)
+    print("Listening...")
+
+    frames = []
+    for i in range(0, int(44100 / 1024 * 5)):
+        data = stream.read(1024)
+        frames.append(data)
+    print("Searching...")
+
+    find(frames)

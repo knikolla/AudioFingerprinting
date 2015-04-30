@@ -41,7 +41,7 @@ class Database(object):
                 # Duplicate, do nothing
                 continue
 
-    def get(self, hash):
+    def get_fingerprint(self, hash):
         s = select([self._fingerprints]).where(self._fingerprints.c.hash == hash)
         result = self._engine.execute(s)
         row = result.fetchone()
@@ -50,6 +50,11 @@ class Database(object):
             return row['song_id'], row['time']
         else:
             return None
+
+    def get_song(self, id):
+        s = select([self._songs]).where(self._songs.c.id == id)
+        result = self._engine.execute(s)
+        return result.fetchone()
 
 
 def create_fingerprints(peaks):

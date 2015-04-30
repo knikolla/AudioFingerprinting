@@ -1,7 +1,3 @@
-import analyze
+import find
 
-from find import find
-
-# Bach
-data, params = analyze.read_wav("../music/Beethoven.Seventh.wav")
-find(data[500000:800000])
+find.from_file("../music/Beethoven.Seventh.Noise.wav", start=500000, end=800000)
