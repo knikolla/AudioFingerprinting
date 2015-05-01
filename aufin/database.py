@@ -5,9 +5,15 @@ from sqlalchemy import (create_engine, select, Table, Integer, String,
                         Column, MetaData, Sequence, ForeignKey, UniqueConstraint)
 from sqlalchemy.exc import IntegrityError
 
+from config import SQL_HOST, SQL_DB, SQL_PASS, SQL_USER
+
 class Database(object):
     def __init__(self):
-        self._engine = create_engine('mysql+pymysql://root:root@localhost:8889/aufin')
+        self._engine = create_engine('mysql+pymysql://' +
+                                     SQL_USER + ':' +
+                                     SQL_PASS + '@' +
+                                     SQL_HOST + '/' +
+                                     SQL_DB)
 
         self._metadata = MetaData()
         self._songs = Table('songs', self._metadata,

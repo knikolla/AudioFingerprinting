@@ -19,9 +19,8 @@ def find(signal):
     for h, rel_time in fingerprints:
         match = db.get_fingerprint(h)
 
-        # If the fingerprint exists in the database
-        if len(match) > 1:
-            print(match)
+        #if len(match) > 1:
+        #    print(match)
 
         for f in match:
             song_id = f["song_id"]
