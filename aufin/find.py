@@ -3,6 +3,7 @@ import pyaudio
 import numpy
 
 from analyze import read_wav, get_spectrogram, get_peaks
+from config import MIC_SECONDS
 
 
 def find(signal):
@@ -70,7 +71,7 @@ def from_mic():
     print("Listening...")
 
     frames = []
-    for i in range(0, int((44100 * 8) / 1024)):
+    for i in range(0, int((44100 * MIC_SECONDS) / 1024)):
         data = stream.read(1024)
         decoded = numpy.fromstring(data, 'int16')
         frames.extend(decoded)
