@@ -3,6 +3,7 @@ import find
 import database
 import sys
 
+
 def main(argv):
     if len(argv) == 0:
         print_help()
@@ -14,7 +15,8 @@ def main(argv):
             author = input("Author: ")
             album = input("Album: ")
             metadata = {'title': title, 'author': author, 'album': album}
-            database.insert_song(metadata, analyze.get_peaks(analyze.get_spectrogram(source)))
+            data, params = analyze.read_wav(source)
+            database.insert_song(metadata, analyze.get_peaks(analyze.get_spectrogram(data)))
         elif operation == "find":
             source = argv[1].lower()
             if source == "mic":
